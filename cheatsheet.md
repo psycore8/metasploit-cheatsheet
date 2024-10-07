@@ -32,6 +32,12 @@ listm
 popm
 ```
 
+### use a file with IP addresses for RHOSTS
+
+```ruby
+set RHOSTS file:/home/user/iplist.txt
+```
+
 ### Run (Backgroundjob)
 
 ```ruby
@@ -91,7 +97,40 @@ msf6 > use auxiliary/scanner/portscan/tcp
 msf6 auxiliary(scanner/portscan/tcp) > hosts -R
 msf6 auxiliary(scanner/portscan/tcp) > run
 ```
+### Metasploit with PostgreSQL
 
+#### ALTER DATABASE Version mismatch
+
+```shell
+sudo -u postgres psql
+\l
+ALTER DATABASE <dbnames> REFRESH COLLATION VERSION;
+\q
+service postgresql restart
+```
+
+#### Password reset for user msf
+
+```shell
+sudo -u postgres psql
+\password msf
+Enter new password for user "msf": 
+Enter it again: 
+msfdb reinit
+```
+
+#### Port Problems with PostgreSQL 15 and 16 installed
+
+```shell
+sudo nano /etc/postgresql/16/main/postgresql.conf # find "port = 5433" and change it to "port = 5422"
+sudo nano /etc/postgresql/15/main/postgresql.conf # find "port = 5432" and change it to "port = 5433"
+sudo nano /etc/postgresql/16/main/postgresql.conf # find "port = 5422" and change it to "port = 5432"
+```
+
+```shell
+msfdb reinit
+msfdb status
+```
 
 ## Meterpreter
 
